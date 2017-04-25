@@ -1,0 +1,17 @@
+Input: inputImage, outputImage, numThreads, chunkSize
+
+Dispatch_Threads:
+    Create threads(numThreads) to compute a chunk(Compute_Chunk)
+    Join threads
+-----------------------------------------------------------------
+Compute_Chunk:
+    X = Get_dynamic_chunk();
+    Compute Sobel_Algorithm() for each chunk X
+    Write into temp_output_Image(Just to be safe)
+-----------------------------------------------------------------
+Get_dynamic_chunk:
+    Get lock on nextAvailableChunk
+    fetch value in N
+    Increment nextAvailableChunk
+    Release lock
+    return N

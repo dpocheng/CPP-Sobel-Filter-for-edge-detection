@@ -1,0 +1,24 @@
+MPI_Initialze
+
+procId = MPI_Comm_rank(MPI_COMM_WORLD)
+numProc = MPI_Comm_size(MPI_COMM_WORLD)
+
+if(procId == 0) // Root Node
+    read Image into inputImage
+
+Scatter from Root to other nodes, each gets (image_height/numProc)*image_width MPI_INTs into partial_image
+(Take care of left-over chunk)
+
+Compute_sobel()
+    Sharing row(two-way sharing) with procId-1, except for procId == 0
+    Sharing row(two-way sharing) with procId+1, except for procId == last_process
+    Add received rows to partial_image
+    Process Sobel Algorithm on new_partial_Image(don't forget boundary cases) and produce partial_output
+
+
+Gather partial_output from each node into root and store in outputImage
+
+if(procId == 0) // Root Node
+    Create output PGM image
+
+MPI_Finalize
